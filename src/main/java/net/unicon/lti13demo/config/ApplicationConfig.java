@@ -48,11 +48,10 @@ public class ApplicationConfig implements ApplicationContextAware {
     @PostConstruct
     public void init() {
         log.info("INIT");
-        env.setActiveProfiles("dev", "testing");
         synchronized (configLock) {
             config = this;
         }
-        log.info("Config INIT: profiles active: {0}.", ArrayUtils.toString(env.getActiveProfiles()));
+        log.info("Config INIT: profiles active: {}.", ArrayUtils.toString(env.getActiveProfiles()));
     }
 
     @PreDestroy

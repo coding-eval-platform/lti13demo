@@ -1,0 +1,277 @@
+<!--
+
+    Copyright 2019 Unicon (R)
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<!DOCTYPE html>
+<!--suppress CheckEmptyScriptTag -->
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.thymeleaf.org ">
+<head>
+    <title>LTI Starter</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+</head>
+<body>
+
+<!-- Derived from https://github.com/ddelblanco/lti_starter/blob/master/src/main/resources/templates/home.html -->
+<h3>Hello <em><span sec:authentication="principal.firstName"/> <span sec:authentication="principal.familyName"/></em>!</h3>
+
+<p>
+<form th:action="@{/logout}" method="post">
+    <input type="submit" value="Logout"/>
+</form>
+</p>
+
+<h4>Request</h4>
+<table class="table">
+    <thead>
+        <th scope="col">Field Name</th>
+        <th scope="col">Value</th>
+    </thead>
+    <tr>
+        <td>Timestamp</td>
+        <td><code th:text="${today}"/></td>
+    </tr>
+    <tr>
+        <td>URI</td>
+        <td><code th:text="${#request.getRequestURI()}"/></td>
+    </tr>
+</table>
+
+<h4>SpringSecurity <code>Authentication</code> Properties</h4>
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Field Name</th>
+        <th scope="col">Value</th>
+    </tr>
+    </thead>
+    <tr>
+        <td>Class.Name</td>
+        <td><code sec:authentication="class.name">null</code></td>
+    </tr>
+    <tr>
+        <td>Name</td>
+        <td><code sec:authentication="name">null</code></td>
+    </tr>
+    <tr>
+        <td>Credentials</td>
+        <td><code sec:authentication="credentials">null</code></td>
+    </tr>
+    <tr>
+        <td>Principal.Class.Name</td>
+        <td><code sec:authentication="principal.class.name">null</code></td>
+    </tr>
+    <tr>
+        <td>Profile.Class.Name</code></td>
+        <td><code sec:authentication="profile.class.name">null</code></td>
+    </tr>
+    <tr>
+        <td>Pofiles.Size</code></td>
+        <td><code th:text="${#lists.size(#authentication.profiles)}">null</code></td>
+    </tr>
+    <tr>
+        <td>Authorities</td>
+        <td><code sec:authentication="authorities">null</code></td>
+    </tr>
+    <tr>
+        <td>Authenticated</td>
+        <td><code sec:authentication="authenticated">null</code></td>
+    </tr>
+    <tr>
+        <td>Details</td>
+        <td><code sec:authentication="details">null</code></td>
+    </tr>
+</table>
+
+<h4>Principal Properties</h4>
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Field Name</th>
+        <th scope="col">Value</th>
+    </tr>
+    </thead>
+    <tr>
+        <td>Id</td>
+        <td><code sec:authentication="principal.id">null</code></td>
+    </tr>
+    <tr>
+        <td>TypedId</td>
+        <td><code sec:authentication="principal.typedId">null</code></td>
+    </tr>
+    <tr>
+        <td>Subject</td>
+        <td><code sec:authentication="principal.subject">null</code></td>
+    </tr>
+    <tr>
+        <td>Issuer</td>
+        <td><code sec:authentication="principal.issuer">null</code></td>
+    </tr>
+    <tr>
+        <td>Audience</td>
+        <td><code sec:authentication="principal.audience">null</code></td>
+    </tr>
+    <tr>
+        <td>ExpirationDate</td>
+        <td><code sec:authentication="principal.expirationDate">null</code></td>
+    </tr>
+    <tr>
+        <td>NotBefore</td>
+        <td><code sec:authentication="principal.notBefore">null</code></td>
+    </tr>
+    <tr>
+        <td>IssuedAt</td>
+        <td><code sec:authentication="principal.issuedAt">null</code></td>
+    </tr>
+    <tr>
+        <td>Email</td>
+        <td><code sec:authentication="principal.email">null</code></td>
+    </tr>
+    <tr>
+        <td>EmailVerified</td>
+        <td><code sec:authentication="principal.emailVerified">null</code></td>
+    </tr>
+    <tr>
+        <td>FirstName</td>
+        <td><code sec:authentication="principal.firstName">null</code></td>
+    </tr>
+    <tr>
+        <td>MiddleName</td>
+        <td><code sec:authentication="principal.middleName">null</code></td>
+    </tr>
+    <tr>
+        <td>FamilyName</td>
+        <td><code sec:authentication="principal.familyName">null</code></td>
+    </tr>
+    <tr>
+        <td>DisplayName</td>
+        <td><code sec:authentication="principal.displayName">null</code></td>
+    </tr>
+    <tr>
+        <td>Nickname</td>
+        <td><code sec:authentication="principal.nickname">null</code></td>
+    </tr>
+    <tr>
+        <td>Username</td>
+        <td><code sec:authentication="principal.username">null</code></td>
+    </tr>
+    <tr>
+        <td>Gender</td>
+        <td><code sec:authentication="principal.gender">null</code></td>
+    </tr>
+    <tr>
+        <td>Locale</td>
+        <td><code sec:authentication="principal.locale">null</code></td>
+    </tr>
+    <tr>
+        <td>PictureUrl</td>
+        <td><code sec:authentication="principal.pictureUrl">null</code></td>
+    </tr>
+    <tr>
+        <td>ProfileUrl</td>
+        <td><code sec:authentication="principal.profileUrl">null</code></td>
+    </tr>
+    <tr>
+        <td>Location</td>
+        <td><code sec:authentication="principal.location">null</code></td>
+    </tr>
+    <tr>
+        <td>Expired</td>
+        <td><code sec:authentication="principal.expired">null</code></td>
+    </tr>
+    <tr>
+        <td>PhoneNumber</td>
+        <td><code sec:authentication="principal.phoneNumber">null</code></td>
+    </tr>
+    <tr>
+        <td>UpdatedAt</td>
+        <td><code sec:authentication="principal.updatedAt">null</code></td>
+    </tr>
+    <tr>
+        <td>AuthTime</td>
+        <td><code sec:authentication="principal.authTime">null</code></td>
+    </tr>
+    <tr>
+        <td>Nonce</td>
+        <td><code sec:authentication="principal.nonce">null</code></td>
+    </tr>
+    <tr>
+        <td>Acr</td>
+        <td><code sec:authentication="principal.acr">null</code></td>
+    </tr>
+    <tr>
+        <td>Amr</td>
+        <td><code sec:authentication="principal.amr">null</code></td>
+    </tr>
+    <tr>
+        <td>Azp</td>
+        <td><code sec:authentication="principal.azp">null</code></td>
+    </tr>
+</table>
+
+<h4>Principal Attributes</h4>
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Field Name</th>
+        <th scope="col">Value</th>
+    </tr>
+    </thead>
+    <tr th:each="attr: ${#authentication.principal.attributes}">
+        <td th:text="${attr.key}" />
+        <td><code th:text="${attr.value}">null</code></td>
+    </tr>
+</table>
+
+<h4>Role-Specific Content</h4>
+<table class="table">
+    <thead>
+    <th scope="col">Role</th>
+    <th scope="col">Content</th>
+    </thead>
+    <tr>
+        <td><code>ADMIN</code></td>
+        <td><span sec:authorize="hasRole('ADMIN')">ADMIN content</span><span sec:authorize="!hasRole('ADMIN')"><em>Forbidden</em></span></td>
+    </tr>
+    <tr>
+        <td><code>USER</code></td>
+        <td><span sec:authorize="hasRole('USER')">USER content</span><span sec:authorize="!hasRole('USER')"><em>Forbidden</em></span></td>
+    </tr>
+    <tr>
+        <td><code>STAFF</code></td>
+        <td><span sec:authorize="hasRole('STAFF')">STAFF content</span><span sec:authorize="!hasRole('STAFF')"><em>Forbidden</em></span></td>
+    </tr>
+    <tr>
+        <td><code>AUTHOR</code></td>
+        <td><span sec:authorize="hasRole('AUTHOR')">AUTHOR content</span><span sec:authorize="!hasRole('AUTHOR')"><em>Forbidden</em></span></td>
+    </tr>
+    <tr>
+        <td><code>INSTRUCTOR</code></td>
+        <td><span sec:authorize="hasRole('INSTRUCTOR')">INSTRUCTOR content</span><span sec:authorize="!hasRole('INSTRUCTOR')"><em>Forbidden</em></span></td>
+    </tr>
+    <tr>
+        <td><code>STUDENT</code></td>
+        <td><span sec:authorize="hasRole('STUDENT')">STUDENT content</span><span sec:authorize="!hasRole('STUDENT')"><em>Forbidden</em></span></td>
+    </tr>
+    <tr>
+        <td><code>OBSERVER</code></td>
+        <td><span sec:authorize="hasRole('OBSERVER')">OBSERVER content</span><span sec:authorize="!hasRole('OBSERVER')"><em>Forbidden</em></span></td>
+    </tr>
+</table>
+
+</body>
+</html>

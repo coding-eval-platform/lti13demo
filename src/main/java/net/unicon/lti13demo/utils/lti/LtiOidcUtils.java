@@ -14,6 +14,8 @@
  */
 package net.unicon.lti13demo.utils.lti;
 
+import com.google.common.collect.ImmutableMap;
+import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import net.unicon.lti13demo.model.PlatformDeployment;
@@ -32,6 +34,7 @@ import java.security.Key;
 import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 public class LtiOidcUtils {
 
@@ -46,27 +49,38 @@ public class LtiOidcUtils {
      * @return
      */
     public static String generateState(LTIDataService ltiDataService, PlatformDeployment platformDeployment, Map<String, String> authRequestMap, LoginInitiationDTO loginInitiationDTO) throws GeneralSecurityException, IOException {
+        return generateState(
+                ImmutableMap.of(
+                        "original_iss", loginInitiationDTO.getIss(),  //All this claims are the information received in the OIDC initiation and some other useful things.
+                        "loginHint", loginInitiationDTO.getLoginHint(),
+                        "ltiMessageHint", loginInitiationDTO.getLtiMessageHint(),
+                        "targetLinkUri", loginInitiationDTO.getTargetLinkUri(),
+                        "controller", "/oidc/login_initiations"
+                ),
+                builder -> {
+                    builder.setSubject(platformDeployment.getIss()); // We store here the platform issuer to check that matches with the issuer received later
+                    builder.setId(authRequestMap.get("nonce")); //just a nonce... we don't use it by the moment, but it could be good if we store information about the requests in DB.
+                },
+                ltiDataService
+        );
+    }
 
+    public static String generateState(Map<String,Object> claims, Consumer<JwtBuilder> overrides, LTIDataService ltiDataService) throws GeneralSecurityException, IOException {
         Date date = new Date();
         Optional<RSAKeyEntity> rsaKeyEntityOptional = ltiDataService.getRepos().rsaKeys.findById(new RSAKeyId("OWNKEY",true));
         if (rsaKeyEntityOptional.isPresent()) {
             Key issPrivateKey = OAuthUtils.loadPrivateKey(rsaKeyEntityOptional.get().getPrivateKey());
-            String state = Jwts.builder()
+            JwtBuilder jwtBuilder = Jwts.builder()
                     .setHeaderParam("kid", "OWNKEY")  // The key id used to sign this
-                    .setIssuer("ltiStarter")  //This is our own identifier, to know that we are the issuer.
-                    .setSubject(platformDeployment.getIss()) // We store here the platform issuer to check that matches with the issuer received later
-                    .setAudience("Think about what goes here")  //TODO think about a useful value here
                     .setExpiration(DateUtils.addSeconds(date, 3600)) //a java.util.Date
                     .setNotBefore(date) //a java.util.Date
                     .setIssuedAt(date) // for example, now
-                    .setId(authRequestMap.get("nonce")) //just a nonce... we don't use it by the moment, but it could be good if we store information about the requests in DB.
-                    .claim("original_iss", loginInitiationDTO.getIss())  //All this claims are the information received in the OIDC initiation and some other useful things.
-                    .claim("loginHint", loginInitiationDTO.getLoginHint())
-                    .claim("ltiMessageHint", loginInitiationDTO.getLtiMessageHint())
-                    .claim("targetLinkUri", loginInitiationDTO.getTargetLinkUri())
-                    .claim("controller", "/oidc/login_initiations")
-                    .signWith(SignatureAlgorithm.RS256, issPrivateKey)  //We sign it
-                    .compact();
+                    .addClaims(claims)
+                    .signWith(SignatureAlgorithm.RS256, issPrivateKey);  //We sign it
+            if (overrides != null) {
+                overrides.accept(jwtBuilder);
+            }
+            String state = jwtBuilder.compact();
             log.debug("State: \n {} \n", state);
             return state;
         } else {
