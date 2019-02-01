@@ -271,7 +271,7 @@ public class WebSecurityConfig {
 
             protected String buildUserDetailsKey(CommonProfile profile) {
                 // TODO UserDetailsService/Manager only supports lookup by `username`. This is tough since LTI launches
-                //   are not going to contain usernames per-se, so we go with username==email, but this is not a good
+                //   are not going to contain usernames per-se, so we could go with username==email, but this is not a good
                 //   solution b/c "private" launches w/o email addrs should be considered commonplace. So the only
                 //   way a UserDetailsManager-backed impl would actually work would be to either use LTI IDs as
                 //   usernames (not plausible for a 'real' Tool) or depend on an extension of that interface that
@@ -283,7 +283,7 @@ public class WebSecurityConfig {
                 //   a) create and store the user in some tenant-specific scope,
                 //   b) store some tenant-level roles (LTI "system" and "institution" roles) in that same scope,
                 //   c) store context-level roles in some content-specific scope, i.e. class enrollments
-                return profile.getEmail();
+                return profile.getId();
             }
 
             protected Optional<UserDetails> findUserDetails(CommonProfile profile) {
@@ -335,6 +335,9 @@ public class WebSecurityConfig {
             if (StringUtils.isBlank(base)) {
                 return "/";
             }
+            if (base.endsWith( "/" )) {
+                return base;
+            }
             return base + "/";
         }
 
@@ -355,6 +358,7 @@ public class WebSecurityConfig {
                 @Override
                 protected void addStateAndNonceParameters(final WebContext context, final Map<String, String> params) {
                     collectPreloginParams(context, params);
+                    params.put("prompt", "none");
                     super.addStateAndNonceParameters(context, params);
                 }
             });
@@ -366,11 +370,15 @@ public class WebSecurityConfig {
                         @Override
                         protected IDTokenValidator createRSATokenValidator(final OidcConfiguration configuration,
                                                                            final JWSAlgorithm jwsAlgorithm, final ClientID clientID) {
-                            return new IDTokenValidator(
-                                    configuration.findProviderMetadata().getIssuer(),
-                                    clientID,
-                                    jwsAlgorithm,
-                                    findKeySet(configuration.findProviderMetadata().getIssuer(), clientID));
+                            if (configuration.getProviderMetadata().getJWKSetURI() != null) {
+                                return super.createRSATokenValidator( configuration, jwsAlgorithm, clientID );
+                            } else {
+                                return new IDTokenValidator(
+                                        configuration.findProviderMetadata().getIssuer(),
+                                        clientID,
+                                        jwsAlgorithm,
+                                        findKeySet(configuration.findProviderMetadata().getIssuer(), clientID));
+                            }
                         }
 
                         private JWKSet findKeySet(Issuer issuer, ClientID clientId) {
@@ -544,20 +552,53 @@ public class WebSecurityConfig {
 
         // TODO this needs to be per-Client, so will need to change to not be a bean (will probably be encapsulated
         //   behind a custom Clients impl that reads Clients from the db).
+//        @Bean
+//        public OidcConfiguration lti3OidcConfiguration() {
+//            OidcConfiguration oidcConfiguration = new OidcConfiguration();
+//
+//            oidcConfiguration.setScope(OIDCScopeValue.OPENID.getValue());
+//            oidcConfiguration.setClientId("7e21a7d3-6c13-4364-8f77-28aa97087b96");
+//
+//            OIDCProviderMetadata oidcProviderMetadata = new OIDCProviderMetadata(
+//                    new Issuer("https://blackboard.com"),
+//                    ImmutableList.of(SubjectType.PUBLIC),
+//                    URI.create("https://devportal-playground.saas.bbpd.io/api/v1/management/applications/7e21a7d3-6c13-4364-8f77-28aa97087b96/jwks.json") // TODO value likely wrong...
+//            );
+////            oidcProviderMetadata.setAuthorizationEndpointURI(URI.create("https://vhs.int.bbpd.io/learn/api/public/v1/oauth2/authorizationcode")); // TODO source from db
+//            oidcProviderMetadata.setAuthorizationEndpointURI(URI.create("https://devportal-playground.saas.bbpd.io/api/v1/gateway/oauth2/jwttoken")); // TODO source from db
+//            oidcProviderMetadata.setIDTokenJWSAlgs(ImmutableList.of(JWSAlgorithm.RS256));
+//            oidcConfiguration.setProviderMetadata(oidcProviderMetadata);
+//
+//            oidcConfiguration.setUseNonce(true);
+//
+//            oidcConfiguration.setClientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC); // TODO this is not right but is the only way to get OidcAuthenticator to work... we'll need to provide our own impl of that
+//            oidcConfiguration.setSecret("thisiswrong"); // TODO also not right, same reason as setClientAuthenticationMethod()
+//
+//            oidcConfiguration.setStateGenerator(lti3OidcStateGenerator());
+//            oidcConfiguration.setWithState(true);
+//
+//            // Enable Implicit flow
+//            oidcConfiguration.setResponseType("id_token");
+//            oidcConfiguration.setResponseMode("form_post");
+//
+//            return oidcConfiguration;
+//        }
+
+        // TODO this needs to be per-Client, so will need to change to not be a bean (will probably be encapsulated
+        //   behind a custom Clients impl that reads Clients from the db).
         @Bean
         public OidcConfiguration lti3OidcConfiguration() {
             OidcConfiguration oidcConfiguration = new OidcConfiguration();
 
             oidcConfiguration.setScope(OIDCScopeValue.OPENID.getValue());
-            oidcConfiguration.setClientId("7e21a7d3-6c13-4364-8f77-28aa97087b96");
+            oidcConfiguration.setClientId("4"); // Has to be the Canvas DeveloperKey ID
 
             OIDCProviderMetadata oidcProviderMetadata = new OIDCProviderMetadata(
-                    new Issuer("https://blackboard.com"),
+                    new Issuer("https://canvas.instructure.com"),
                     ImmutableList.of(SubjectType.PUBLIC),
-                    URI.create("https://devportal-playground.saas.bbpd.io/api/v1/management/applications/7e21a7d3-6c13-4364-8f77-28aa97087b96/jwks.json") // TODO value likely wrong...
+                    URI.create("http://localhost:3000/api/lti/security/jwks")
             );
-//            oidcProviderMetadata.setAuthorizationEndpointURI(URI.create("https://vhs.int.bbpd.io/learn/api/public/v1/oauth2/authorizationcode")); // TODO source from db
-            oidcProviderMetadata.setAuthorizationEndpointURI(URI.create("https://devportal-playground.saas.bbpd.io/api/v1/gateway/oauth2/jwttoken")); // TODO source from db
+            oidcProviderMetadata.setAuthorizationEndpointURI(URI.create("http://localhost:3000/api/lti/authorize")); // TODO source from db
             oidcProviderMetadata.setIDTokenJWSAlgs(ImmutableList.of(JWSAlgorithm.RS256));
             oidcConfiguration.setProviderMetadata(oidcProviderMetadata);
 

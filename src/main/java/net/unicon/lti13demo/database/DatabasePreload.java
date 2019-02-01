@@ -331,6 +331,54 @@ public class DatabasePreload {
 //            rsaKeyRepository.saveAndFlush(new RSAKeyEntity("Wv9hbzJhtY7kNeg8uf-kfG9GUTZogcePNleBy2lVcns",true, tool6PublicString,tool6PrivateString));
 //            rsaKeyRepository.saveAndFlush(new RSAKeyEntity("XKXYskdHB6p1XNsVGQO-iIM9DAb2siIRWvBu-1FJ_sY",false, iss6PublicKey,null));
 
+            // dmccallum local Canvas tool
+            PlatformDeployment iss7 = new PlatformDeployment();
+            iss7.setClientId("4"); // This has to be the DeveloperKey ID in Canvas
+            iss7.setIss("https://canvas.instructure.com");
+            iss7.setDeploymentId("idontknowwhattosetthisto"); // This is how you'd distinguish between specific registrations/placements/something
+            iss7.setOidcEndpoint("http://localhost:3000/api/lti/authorize"); // /authorize will display request info, /authorize_redirect will actually send auth back to tool
+            iss7.setJwksEndpoint("http://localhost:3000/api/lti/security/jwks");
+            String tool7PrivateString = "-----BEGIN RSA PRIVATE KEY-----" +
+                    "MIIEpQIBAAKCAQEA7i2h/CGg3tCqVqjhiMMcym6LUYARB/wu0UAGSSaKy//QWPiV" +
+                    "VZrHI8HsNmyM+Gk/0mLS+OtubkEyWmsNW43/cCoPZoZvuxiMITM48Bly7GtO4tOD" +
+                    "FLDwY6VIXIc2RQTC7NoxkKqyXAz1n8JNxIwoY2EQvVKEqV2mbCF1ET7RmTmkcQIy" +
+                    "Wy7pWLXsGNRt972CEhg+FXRTwo0l4EzOzLMmgqsqX/gx3ZnHNHj/zrHVu6R91jIY" +
+                    "m0XzXUtXVNZkoFGO8HRF9DL0VOVvJ7LJ/zA0B/HJV4GIguZjy6WH7+kBJC7qUPbH" +
+                    "x23Bp6HMSV5WEmtVTHv4dqCfT5W3anJ2bx65PwIDAQABAoIBAQC/X2cSISsTHPJg" +
+                    "4x0kODF/7cZ/W7lTgytS8nCagh9vvkH32vSSbeSoNH7JU/sI9fhT4RfG7dQzPqto" +
+                    "vy9iavvdcc4iAM7xs82UN4X+VVRj5ezikDR4gZsFVZ6IyhOu7R56FO9SX/UjxT3u" +
+                    "eb7mt/8TqsA6fn0dYKQBqfhYPPNIet1MOEmVPHNGBm+qqDiMi/VymClS4Gu7vCzE" +
+                    "AYptdcWtfPqt327pgs4cBQJLwk+Q1uDL+EBZiZNoKpfdfGn0xyO5kHxrxdHdsDJV" +
+                    "YNjhRIZNxpyM+Mp2OEmgn2EGJhhXU9fV+4Jn2GoEPqwk78ZCjG+Nydivep2HQ4id" +
+                    "/BerHWfRAoGBAP5HuplBmEdRYLE56JE5G/BfOJhT80q0islkbfPFsGJhXfAGh7Jv" +
+                    "IB51wKuIlipAu/n7PdeqFgt95dt1BVfMPRNRKhPpXO1crqxBPzBjVz2e67xv4s4G" +
+                    "5flvu4aLiQULEQvYfsrPXIaG2pcLquQVU2Hn2yUmH+aaSPQLySF6siUVAoGBAO/K" +
+                    "BjiDR08qeUPta0ckGWCfmrOEzclljn+GbagrrPu2BfdkTzE5UgAabE12xPPfc+/H" +
+                    "HSXG2mBpUaEOG2VSjZJ6VMszG6f/HfUhxD4JL9c3jsP+PTzMZgDb2JLXr4l0o7Y6" +
+                    "OXd0S61kFAdIH+GjPSQkygUem2+NUqzm6Hc7jaIDAoGAYWvv5QnJowFdr2kFXqZn" +
+                    "uudwkoQPgX68cb6FldEW7Apr6CtIUCfdQW5R/CZfih61JmiI4BjtS0fYCgXCn0nD" +
+                    "2KPPIEPXc6V/0sVIxWw6H4TEwrSHS/I+qBuT2E+blpAP3t76bQ+XXn9KPnac6bf1" +
+                    "81vWjVwW+s3/x2jAjZApsqUCgYEA23MeolWyy0bp2DrOdTsaZo1q/WRLGUfyU89p" +
+                    "SAFAvNRnPXP17eyxmRqVh4ds1GvqJMUrbclBTf7VD/pjJCWbHzUJqTXK18LpXdBb" +
+                    "UxMBT4uvArwIuz2tFJge6rSuF7RBp6I9uY8bO0Jd+hQN6WiFqjBpGqpaQosp4Mcq" +
+                    "dQRxqJUCgYEAxrjshdUcf+9x4cIpq8iBTw9e+40UG8206TESPQZ+aqVaeQCz/qAB" +
+                    "HbEbmkzzqyxzmLow2uH/DRMc3Pva9ryx6g0qlgFgEkySVp3+d/zRo11IkOtjfc0N" +
+                    "KDC+q8752493+CF7/an5Uj3+V7RL3VjYekuDMM7VjnAgyu3ENoWXDfg=" +
+                    "-----END RSA PRIVATE KEY-----";
+            String tool7PublicString = "-----BEGIN PUBLIC KEY-----" +
+                    "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA7i2h/CGg3tCqVqjhiMMc" +
+                    "ym6LUYARB/wu0UAGSSaKy//QWPiVVZrHI8HsNmyM+Gk/0mLS+OtubkEyWmsNW43/" +
+                    "cCoPZoZvuxiMITM48Bly7GtO4tODFLDwY6VIXIc2RQTC7NoxkKqyXAz1n8JNxIwo" +
+                    "Y2EQvVKEqV2mbCF1ET7RmTmkcQIyWy7pWLXsGNRt972CEhg+FXRTwo0l4EzOzLMm" +
+                    "gqsqX/gx3ZnHNHj/zrHVu6R91jIYm0XzXUtXVNZkoFGO8HRF9DL0VOVvJ7LJ/zA0" +
+                    "B/HJV4GIguZjy6WH7+kBJC7qUPbHx23Bp6HMSV5WEmtVTHv4dqCfT5W3anJ2bx65" +
+                    "PwIDAQAB" +
+                    "-----END PUBLIC KEY-----";
+            // Leave these alone for now... now sure how the tool's key pair is used ATM, and we want to get the
+            // platform PK from its JWK URL
+//            rsaKeyRepository.saveAndFlush(new RSAKeyEntity("Wv9hbzJhtY7kNeg8uf-kfG9GUTZogcePNleBy2lVcns",true, tool6PublicString,tool6PrivateString));
+//            rsaKeyRepository.saveAndFlush(new RSAKeyEntity("XKXYskdHB6p1XNsVGQO-iIM9DAb2siIRWvBu-1FJ_sY",false, iss6PublicKey,null));
+
 
             // create our sample user
             LtiUserEntity user = ltiUserRepository.saveAndFlush(new LtiUserEntity("azeckoski", null));
