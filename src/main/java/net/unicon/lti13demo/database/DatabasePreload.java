@@ -333,7 +333,7 @@ public class DatabasePreload {
 
             // dmccallum local Canvas tool
             PlatformDeployment iss7 = new PlatformDeployment();
-            iss7.setClientId("4"); // This has to be the DeveloperKey ID in Canvas
+            iss7.setClientId("11"); // This has to be the DeveloperKey ID in Canvas
             iss7.setIss("https://canvas.instructure.com");
             iss7.setDeploymentId("idontknowwhattosetthisto"); // This is how you'd distinguish between specific registrations/placements/something
             iss7.setOidcEndpoint("http://localhost:3000/api/lti/authorize"); // /authorize will display request info, /authorize_redirect will actually send auth back to tool

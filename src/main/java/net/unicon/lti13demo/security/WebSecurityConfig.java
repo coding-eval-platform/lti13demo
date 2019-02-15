@@ -591,7 +591,7 @@ public class WebSecurityConfig {
             OidcConfiguration oidcConfiguration = new OidcConfiguration();
 
             oidcConfiguration.setScope(OIDCScopeValue.OPENID.getValue());
-            oidcConfiguration.setClientId("4"); // Has to be the Canvas DeveloperKey ID
+            oidcConfiguration.setClientId("11"); // Has to be the Canvas DeveloperKey ID
 
             OIDCProviderMetadata oidcProviderMetadata = new OIDCProviderMetadata(
                     new Issuer("https://canvas.instructure.com"),
@@ -757,7 +757,9 @@ public class WebSecurityConfig {
         protected void configure(HttpSecurity http) throws Exception {
             http
                     .authorizeRequests()
-                        .antMatchers("/linkables/**").authenticated()
+                        .antMatchers("/linkables/**")
+                            .authenticated()
+                            .and().headers().frameOptions().disable()
                     .and()
                         .csrf()
                             // probably wouldn't do this in production, but for a demo that you're bouncing all the
