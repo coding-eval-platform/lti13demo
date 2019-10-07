@@ -28,7 +28,7 @@ public class ToolConfig implements InitializingBean {
     private void storeBlackboard() {
         final PlatformDeployment platformDeployment = new PlatformDeployment();
         platformDeployment.setIss("https://blackboard.com");
-        platformDeployment.setClientId("cff37769-da98-48a8-961b-bd3770685fa6");
+        platformDeployment.setClientId("32f8a107-de6a-4ec7-99fd-6dc8f76dd1e4");
         platformDeployment.setOidcEndpoint("https://developer.blackboard.com/api/v1/gateway/oauth2/jwttoken");
         platformDeployment.setDeploymentId("ed1b1363-1e56-4014-a196-a76bebd67747");
 

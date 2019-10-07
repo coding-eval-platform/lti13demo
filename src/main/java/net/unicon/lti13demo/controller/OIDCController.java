@@ -154,9 +154,7 @@ public class OIDCController {
                 .append("&response_mode=").append(model.get("response_mode"))
                 .append("&nonce=").append(model.get("nonce"))
                 .append("&prompt=").append(model.get("prompt"))
-
-
-//                .append("&lti_message_hint=").append(model.get("lti_message_hint"))
+                .append("&lti_message_hint=").append(model.get("lti_message_hint"))
 
                 .toString();
     }
